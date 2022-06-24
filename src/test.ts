@@ -1,4 +1,4 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
+// test.ts是karma.conf.js所需文件，用于递归加载所有.spec和框架文件。
 
 import 'zone.js/testing';
 import { getTestBed } from '@angular/core/testing';
@@ -7,9 +7,9 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
-// Needed for `assert` polyfill uses `process`.
-// See: https://github.com/browserify/commonjs-assert/blob/bba838e9ba9e28edf3127ce6974624208502f6bc/internal/assert/assertion_error.js#L138
-// The `assert` polyfill is needed because of `timezone-mock` which is a Node.JS library but in being used in Browser.
+// assert polyfill需要使用process。
+// 参考：https://github.com/browserify/commonjs-assert/blob/bba838e9ba9e28edf3127ce6974624208502f6bc/internal/assert/assertion_error.js#L138
+// 浏览器中使用的Node.js库timezone-mock需要assert polyfill。
 (globalThis as any).process = {
   env: {},
 };
@@ -21,13 +21,13 @@ declare const require: {
   };
 };
 
-// First, initialize the Angular testing environment.
+// 初始化Angular测试环境
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting(),
 );
 
-// Then we find all the tests.
+// 查找所有测试
 const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
+// 加载模块
 context.keys().forEach(context);
