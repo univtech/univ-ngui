@@ -1,4 +1,4 @@
-// test.ts是karma.conf.js所需文件，用于递归加载所有.spec和框架文件。
+// test.ts文件是karma.conf.js需要的文件，用于递归加载所有.spec和框架文件。
 
 import 'zone.js/testing';
 import {getTestBed} from '@angular/core/testing';
@@ -7,9 +7,9 @@ import {
     platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
-// assert polyfill需要使用process。
+// assert腻子脚本使用process时需要。
 // 参考：https://github.com/browserify/commonjs-assert/blob/bba838e9ba9e28edf3127ce6974624208502f6bc/internal/assert/assertion_error.js#L138
-// 浏览器中使用的Node.js库timezone-mock需要assert polyfill。
+// 浏览器中使用的Node.js库timezone-mock需要assert腻子脚本。
 (globalThis as any).process = {
     env: {},
 };
