@@ -9,11 +9,11 @@
 
 // 跳过waiting生命周期状态，立即激活新的Service Worker，即使存在旧的Service Worker控制着另一个Tab。
 self.addEventListener('install', function (event) {
-  event.waitUntil(self.skipWaiting());
+    event.waitUntil(self.skipWaiting());
 });
 
 // 获取Service Worker控制的，当前打开的所有窗口或Tab，并强制重新加载。
 // 激活新的Service Worker时，恢复所有打开的窗口或Tab，不需要手动重新加载。
 self.addEventListener('activate', function (event) {
-  event.waitUntil(self.clients.claim());
+    event.waitUntil(self.clients.claim());
 });
