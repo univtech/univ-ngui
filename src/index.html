@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh">
 
 <head>
     <meta charset="utf-8">
-    <title>Angular</title>
-    <meta name="Description" content="Angular is a platform for building mobile and desktop web applications.
-    Join the community of millions of developers who build compelling user interfaces with Angular.">
+    <title>油腻教程</title>
+    <meta name="Description" content="Angular是一个用于构建移动和桌面Web应用程序的平台。">
     <base href="/">
 
     <link rel="preconnect" href="https://www.google-analytics.com">
@@ -24,7 +23,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="assets/images/favicons/favicon-144x144.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/favicons/favicon-144x144.png">
 
-    <!-- NOTE: These need to be kept in sync with `ngsw-config.template.json`. -->
+    <!-- 注意：这些需要与ngsw-config.template.json保持同步。 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block">
@@ -41,20 +40,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent">
 
     <script>
-        // Dynamically, pre-emptively, add `noindex`, which will be removed when the doc is ready and valid
+        // 动态地、先发制人地添加noindex，在文档准备好并且有效时删除
         tag = document.createElement('meta');
         tag.name = 'robots';
         tag.content = 'noindex';
         document.head.appendChild(tag);
     </script>
 
-    <!-- Google Analytics -->
+    <!-- 谷歌分析服务 -->
     <script>
-        // Note this is a customised version of the GA tracking snippet
-        // See the comments below for more info
+        // 注意：这是GA跟踪代码片段的自定义版本。
         (function (i, s, o, g, r, a, m) {
             if (i.trustedTypes) {
-                // Specify path as a TrustedScriptURL when Trusted Types are available
+                // Trusted类型可用时，把路径指定为TrustedScriptURL
                 g = i.trustedTypes.createPolicy('aio#analytics', {
                     createScriptURL: function (s) {
                         return s;
@@ -69,14 +67,14 @@
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
             a.src = g;
-            ~i.name.indexOf('NG_DEFER_BOOTSTRAP') || // only load library if not running e2e tests
+            ~i.name.indexOf('NG_DEFER_BOOTSTRAP') || // 不运行e2e测试时，只加载库
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     </script>
     <!-- End Google Analytics -->
 
     <script>
-        // Report fatal errors to Google Analytics
+        // 向谷歌分析服务报告致命错误
         window.onerror = function () {
             ga('send', 'exception', {exDescription: formatError.apply(null, arguments), exFatal: true});
 
@@ -85,17 +83,17 @@
                 msg = msg.replace(/^Error: /, '');
                 if (e && e.stack) {
                     stack = e.stack
-                        // strip the leading "Error: " from the stack trace
+                        // 从堆栈跟踪中去掉开头的"Error: "
                         .replace(/^Error: /, '')
-                        // strip the message from the stack trace, if present
+                        // 从堆栈跟踪中去掉消息
                         .replace(msg + '\n', '')
-                        // strip leading spaces
+                        // 去掉开头的空格
                         .replace(/^ +/gm, '')
-                        // strip all leading "at " for each frame
+                        // 为frame去掉开头的"at "
                         .replace(/^at /gm, '')
-                        // replace long urls with just the last segment: `filename:line:column`
+                        // 用最后一个片段“filename:line:column”替换长URL
                         .replace(/(?: \(|@)http.+\/([^/)]+)\)?(?:\n|$)/gm, '@$1\n')
-                        // replace "eval code" in Edge
+                        // 替换Edge中的"eval code"
                         .replace(/ *\(eval code(:\d+:\d+)\)(?:\n|$)/gm, '@???$1\n')
                 } else {
                     line = line || '?';
@@ -118,11 +116,11 @@
     <section id="intro" style="text-shadow: 1px 1px #1976d2;">
         <div class="hero-logo"></div>
         <div class="homepage-container">
-            <div class="hero-headline">The modern web<br>developer's platform</div>
+            <div class="hero-headline">现代Web开发平台</div>
         </div>
     </section>
     <h2 style="color: red; margin-top: 40px; position: relative; text-align: center; text-shadow: 1px 1px #fafafa; border-top: none;">
-        <b><i>This website requires JavaScript.</i></b>
+        <b><i>这个网站需要JavaScript。</i></b>
     </h2>
 </noscript>
 
