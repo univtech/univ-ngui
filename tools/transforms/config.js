@@ -1,5 +1,5 @@
-const { resolve } = require('path');
-const { readdirSync } = require('fs');
+const {resolve} = require('path');
+const {readdirSync} = require('fs');
 
 const PROJECT_ROOT = resolve(__dirname, '../../..');
 const AIO_PATH = resolve(PROJECT_ROOT, 'aio');
@@ -13,11 +13,23 @@ const DOCS_OUTPUT_PATH = resolve(OUTPUT_PATH, 'docs');
 const API_SOURCE_PATH = resolve(PROJECT_ROOT, 'packages');
 
 function requireFolder(dirname, folderPath) {
-  const absolutePath = resolve(dirname, folderPath);
-  return readdirSync(absolutePath)
-    .filter(p => !/[._]spec\.js$/.test(p))  // ignore spec files
-    .map(p => require(resolve(absolutePath, p)));
+    const absolutePath = resolve(dirname, folderPath);
+    return readdirSync(absolutePath)
+        .filter(p => !/[._]spec\.js$/.test(p))  // ignore spec files
+        .map(p => require(resolve(absolutePath, p)));
 }
 
-module.exports = { PROJECT_ROOT, AIO_PATH, TEMPLATES_PATH, API_TEMPLATES_PATH, CONTENTS_PATH, GUIDE_EXAMPLES_PATH, SRC_PATH, OUTPUT_PATH, DOCS_OUTPUT_PATH, API_SOURCE_PATH, requireFolder };
+module.exports = {
+    PROJECT_ROOT,
+    AIO_PATH,
+    TEMPLATES_PATH,
+    API_TEMPLATES_PATH,
+    CONTENTS_PATH,
+    GUIDE_EXAMPLES_PATH,
+    SRC_PATH,
+    OUTPUT_PATH,
+    DOCS_OUTPUT_PATH,
+    API_SOURCE_PATH,
+    requireFolder
+};
 
