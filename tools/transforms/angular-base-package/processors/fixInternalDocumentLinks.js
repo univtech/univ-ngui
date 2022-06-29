@@ -8,17 +8,17 @@
  */
 module.exports = function fixInternalDocumentLinks() {
 
-  var INTERNAL_LINK = /(<a [^>]*href=")(#[^"]*)/g;
+    var INTERNAL_LINK = /(<a [^>]*href=")(#[^"]*)/g;
 
-  return {
-    $runAfter: ['inlineTagProcessor'],
-    $runBefore: ['convertToJsonProcessor'],
-    $process: function(docs) {
-      docs.forEach(doc => {
-        doc.renderedContent = doc.renderedContent.replace(INTERNAL_LINK, (_, pre, hash) => {
-          return pre + doc.path + hash;
-        });
-      });
-    }
-  };
+    return {
+        $runAfter: ['inlineTagProcessor'],
+        $runBefore: ['convertToJsonProcessor'],
+        $process: function (docs) {
+            docs.forEach(doc => {
+                doc.renderedContent = doc.renderedContent.replace(INTERNAL_LINK, (_, pre, hash) => {
+                    return pre + doc.path + hash;
+                });
+            });
+        }
+    };
 };

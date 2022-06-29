@@ -19,18 +19,18 @@
  * by case-insensitive file-systems.
  */
 module.exports = function disambiguateDocPathsProcessor() {
-  return {
-    $runAfter: ['paths-computed'],
-    $runBefore: ['rendering-docs', 'createSitemap'],
-    $process(docs) {
-      for (const doc of docs) {
-        if (!doc.outputPath) {
-          continue;
+    return {
+        $runAfter: ['paths-computed'],
+        $runBefore: ['rendering-docs', 'createSitemap'],
+        $process(docs) {
+            for (const doc of docs) {
+                if (!doc.outputPath) {
+                    continue;
+                }
+                doc.outputPath = encodeToLowercase(doc.outputPath);
+            }
         }
-        doc.outputPath = encodeToLowercase(doc.outputPath);
-      }
-    }
-  };
+    };
 };
 
 /**
@@ -39,5 +39,5 @@ module.exports = function disambiguateDocPathsProcessor() {
  * by an underscore.
  */
 function encodeToLowercase(str) {
-  return str.replace(/[A-Z_]/g, char => char.toLowerCase() + '_');
+    return str.replace(/[A-Z_]/g, char => char.toLowerCase() + '_');
 }

@@ -1,17 +1,17 @@
-module.exports = function() {
-  return {
-    name: 'truncateCode',
-    process: function(str, lines) {
-      if (lines === undefined) return str;
+module.exports = function () {
+    return {
+        name: 'truncateCode',
+        process: function (str, lines) {
+            if (lines === undefined) return str;
 
-      const parts = str && str.split && str.split(/\r?\n/);
-      if (parts && parts.length > lines) {
-        return balance(parts[0] + '...', ['{', '(', '['], ['}', ')', ']']);
-      } else {
-        return str;
-      }
-    }
-  };
+            const parts = str && str.split && str.split(/\r?\n/);
+            if (parts && parts.length > lines) {
+                return balance(parts[0] + '...', ['{', '(', '['], ['}', ')', ']']);
+            } else {
+                return str;
+            }
+        }
+    };
 };
 
 /**
@@ -25,25 +25,25 @@ module.exports = function() {
  * @returns the balanced string
  */
 function balance(str, openers, closers) {
-  const stack = [];
+    const stack = [];
 
-  // Add each open bracket to the stack, removing them when there is a matching closer
-  str.split('').forEach(function(char) {
-    const closerIndex = closers.indexOf(char);
-    if (closerIndex !== -1 && stack[stack.length-1] === closerIndex) {
-      stack.pop();
-    } else {
-      const openerIndex = openers.indexOf(char);
-      if (openerIndex !== -1) {
-        stack.push(openerIndex);
-      }
+    // Add each open bracket to the stack, removing them when there is a matching closer
+    str.split('').forEach(function (char) {
+        const closerIndex = closers.indexOf(char);
+        if (closerIndex !== -1 && stack[stack.length - 1] === closerIndex) {
+            stack.pop();
+        } else {
+            const openerIndex = openers.indexOf(char);
+            if (openerIndex !== -1) {
+                stack.push(openerIndex);
+            }
+        }
+    });
+
+    // Now the stack should contain all the unclosed brackets
+    while (stack.length) {
+        str += closers[stack.pop()];
     }
-  });
 
-  // Now the stack should contain all the unclosed brackets
-  while(stack.length) {
-    str += closers[stack.pop()];
-  }
-
-  return str;
+    return str;
 }

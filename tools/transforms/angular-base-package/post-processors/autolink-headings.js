@@ -13,37 +13,37 @@ const NO_ANCHOR_CLASS = 'no-anchor';
 
 const clone = obj => JSON.parse(JSON.stringify(obj));
 const hasClass = (node, cls) => {
-  const className = node.properties.className;
-  return className && className.includes(cls);
+    const className = node.properties.className;
+    return className && className.includes(cls);
 };
 
 const link = options =>
-  tree => visit(tree, node => {
-    if (is(node, HEADINGS) && has(node, 'id') && !hasClass(node, NO_ANCHOR_CLASS)) {
-      node.children.push({
-        type: 'element',
-        tagName: 'a',
-        properties: Object.assign(clone(options.properties), {href: `#${node.properties.id}`}),
-        children: clone(options.content)
-      });
-    }
-  });
+    tree => visit(tree, node => {
+        if (is(node, HEADINGS) && has(node, 'id') && !hasClass(node, NO_ANCHOR_CLASS)) {
+            node.children.push({
+                type: 'element',
+                tagName: 'a',
+                properties: Object.assign(clone(options.properties), {href: `#${node.properties.id}`}),
+                children: clone(options.content)
+            });
+        }
+    });
 
 module.exports = [
-  slug,
-  [link, {
-    properties: {
-      title: 'Link to this heading',
-      className: ['header-link'],
-      'aria-hidden': 'true'
-    },
-    content: [
-      {
-        type: 'element',
-        tagName: 'i',
-        properties: {className: ['material-icons']},
-        children: [{ type: 'text', value: 'link' }]
-      }
-    ]
-  }]
+    slug,
+    [link, {
+        properties: {
+            title: 'Link to this heading',
+            className: ['header-link'],
+            'aria-hidden': 'true'
+        },
+        content: [
+            {
+                type: 'element',
+                tagName: 'i',
+                properties: {className: ['material-icons']},
+                children: [{type: 'text', value: 'link'}]
+            }
+        ]
+    }]
 ];

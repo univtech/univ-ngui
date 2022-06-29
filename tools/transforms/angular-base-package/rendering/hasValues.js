@@ -1,11 +1,11 @@
 module.exports = function hasValues() {
-  return {
-    name: 'hasValues',
-    process: function(list, property) {
-      if (!list || !Array.isArray(list)) return false;
-      return list.some(item => readProperty(item, property.split('.'), 0));
-    }
-  };
+    return {
+        name: 'hasValues',
+        process: function (list, property) {
+            if (!list || !Array.isArray(list)) return false;
+            return list.some(item => readProperty(item, property.split('.'), 0));
+        }
+    };
 };
 
 /**
@@ -18,6 +18,6 @@ module.exports = function hasValues() {
  *  `readProperty(obj, ['a', 'd'], 0)` will return false;
  */
 function readProperty(obj, propertySegments, index) {
-  const value = obj[propertySegments[index]];
-  return !!value && (index === propertySegments.length - 1 || readProperty(value, propertySegments, index + 1));
+    const value = obj[propertySegments[index]];
+    return !!value && (index === propertySegments.length - 1 || readProperty(value, propertySegments, index + 1));
 }
