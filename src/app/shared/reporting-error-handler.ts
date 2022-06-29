@@ -2,21 +2,25 @@ import {ErrorHandler, Inject, Injectable, VERSION} from '@angular/core';
 import {WindowToken} from './window';
 
 /**
- * Extend the default error handling to report errors to an external service - e.g Google Analytics.
- *
- * Errors outside the Angular application may also be handled by `window.onerror`.
+ * 扩展默认的错误处理器，向外部服务报告错误，例如：谷歌分析服务。<br>
+ * Angular应用程序之外的错误也可以通过window.onerror来处理。
  */
 @Injectable()
 export class ReportingErrorHandler extends ErrorHandler {
 
+    /**
+     * 构造函数，创建ReportingErrorHandler。
+     *
+     * @param window Window对象
+     */
     constructor(@Inject(WindowToken) private window: Window) {
         super();
     }
 
     /**
-     * Send error info to Google Analytics, in addition to the default handling.
+     * 处理错误信息，把错误信息发送到谷歌分析服务。
      *
-     * @param error Information about the error.
+     * @param error 错误信息
      */
     override handleError(error: any) {
         const versionedError = this.prefixErrorWithVersion(error);
@@ -29,6 +33,11 @@ export class ReportingErrorHandler extends ErrorHandler {
         this.reportError(versionedError);
     }
 
+    /**
+     * 在错误信息前面添加版本信息。
+     *
+     * @param error 错误信息
+     */
     private prefixErrorWithVersion<T>(error: T): T {
         const prefix = `[v${VERSION.full}] `;
 
@@ -41,11 +50,16 @@ export class ReportingErrorHandler extends ErrorHandler {
         } else if (typeof error === 'string') {
             error = prefix + error as unknown as T;
         }
-        // If it is a different type, omit the version to avoid altering the original `error` object.
 
+        // 其他类型，返回原始错误对象
         return error;
     }
 
+    /**
+     * 报告错误。
+     *
+     * @param error 错误信息
+     */
     private reportError(error: unknown) {
         if (this.window.onerror) {
             if (error instanceof Error) {
@@ -55,11 +69,12 @@ export class ReportingErrorHandler extends ErrorHandler {
                     try {
                         error = JSON.stringify(error);
                     } catch {
-                        // Ignore the error and just let it be stringified.
+                        // 忽略错误
                     }
                 }
                 this.window.onerror(`${error}`);
             }
         }
     }
+
 }
