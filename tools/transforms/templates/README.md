@@ -1,3 +1,11 @@
+# 模板
+
+githubLinks.html
+content.template.html
+overview-dump.template.html
+json-doc.template.json
+sitemap.template.xml
+
 This folder contains the dgeni templates that are used to generate the API docs
 
 Generally there is a template for each docType.
