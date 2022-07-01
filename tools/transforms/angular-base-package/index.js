@@ -1,10 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const {extname, resolve} = require('canonical-path');
 const {existsSync} = require('fs');
 const path = require('path');
@@ -15,24 +8,22 @@ const jsdocPackage = require('dgeni-packages/jsdoc');
 const nunjucksPackage = require('dgeni-packages/nunjucks');
 const postProcessPackage = require('dgeni-packages/post-process-html');
 
-const {SRC_PATH} = require('../config');
-const examplesPackage = require('../examples-package');
 const linksPackage = require('../links-package');
 const remarkPackage = require('../remark-package');
 const targetPackage = require('../target-package');
 
 const {
     PROJECT_ROOT,
+    TEMPLATES_PATH,
     CONTENTS_PATH,
+    SRC_PATH,
     OUTPUT_PATH,
     DOCS_OUTPUT_PATH,
-    TEMPLATES_PATH,
-    AIO_PATH,
-    requireFolder
+    requireFolder,
 } = require('../config');
 
 module.exports = new Package('angular-base', [
-    gitPackage, jsdocPackage, nunjucksPackage, linksPackage, examplesPackage, targetPackage, remarkPackage, postProcessPackage
+    gitPackage, jsdocPackage, nunjucksPackage, linksPackage, targetPackage, remarkPackage, postProcessPackage
 ])
 
     // Register the processors
@@ -69,12 +60,11 @@ module.exports = new Package('angular-base', [
     })
 
     // Where do we get the source files?
-    .config(function (readFilesProcessor, collectExamples, generateKeywordsProcessor, jsonFileReader) {
+    .config(function (readFilesProcessor, generateKeywordsProcessor, jsonFileReader) {
 
         readFilesProcessor.fileReaders.push(jsonFileReader);
         readFilesProcessor.basePath = PROJECT_ROOT;
         readFilesProcessor.sourceFiles = [];
-        collectExamples.exampleFolders = [];
 
         generateKeywordsProcessor.ignoreWords = require(path.resolve(__dirname, 'ignore-words'))['en'];
         generateKeywordsProcessor.docTypesToIgnore = [undefined, 'example-region', 'json-doc', 'api-list-data', 'api-list-data', 'contributors-json', 'navigation-json', 'announcements-json'];
@@ -105,11 +95,13 @@ module.exports = new Package('angular-base', [
 
         // Standard patterns for matching docs to templates
         templateFinder.templatePatterns = [
-            '${ doc.template }', '${ doc.id }.${ doc.docType }.template.html',
-            '${ doc.id }.template.html', '${ doc.docType }.template.html',
-            '${ doc.id }.${ doc.docType }.template.js', '${ doc.id }.template.js',
-            '${ doc.docType }.template.js', '${ doc.id }.${ doc.docType }.template.json',
-            '${ doc.id }.template.json', '${ doc.docType }.template.json', 'common.template.html'
+            '${ doc.template }',
+            '${ doc.id }.${ doc.docType }.template.html',
+            '${ doc.id }.template.html',
+            '${ doc.docType }.template.html',
+            '${ doc.id }.${ doc.docType }.template.json',
+            '${ doc.id }.template.json',
+            '${ doc.docType }.template.json',
         ];
 
         // Nunjucks and Angular conflict in their template bindings so change Nunjucks
@@ -171,7 +163,7 @@ module.exports = new Package('angular-base', [
 
 
     .config(function (postProcessHtml, addImageDimensions, autoLinkCode, filterPipes, filterAmbiguousDirectiveAliases, ignoreHttpInUrls, ignoreGenericWords) {
-        addImageDimensions.basePath = path.resolve(AIO_PATH, 'src');
+        addImageDimensions.basePath = path.resolve(PROJECT_ROOT, 'src');
         autoLinkCode.customFilters = [ignoreGenericWords, ignoreHttpInUrls, filterPipes, filterAmbiguousDirectiveAliases];
         autoLinkCode.failOnMissingDocPath = true;
         postProcessHtml.plugins = [
