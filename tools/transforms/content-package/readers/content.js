@@ -12,13 +12,13 @@
  * ```
  */
 module.exports = function contentFileReader() {
-  return {
-    name: 'contentFileReader',
-    defaultPattern: /\.md$/,
-    getDocs: function(fileInfo) {
+    return {
+        name: 'contentFileReader',
+        defaultPattern: /\.md$/,
+        getDocs: function (fileInfo) {
 
-      // We return a single element array because content files only contain one document
-      return [{docType: 'content', content: fileInfo.content}];
-    }
-  };
+            // We return a single element array because content files only contain one document
+            return [{docType: 'content', content: fileInfo.content}];
+        }
+    };
 };
