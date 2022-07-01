@@ -1,6 +1,7 @@
 /**
- * This service is used by the autoLinkCode post-processor to filter out pipe docs
- * where the matching word is the pipe name and is not preceded by a pipe
+ * autoLinkCode后处理器使用这个服务来过滤匹配单词是管道名称并且前面没有管道的管道文档
+ *
+ * @returns {function(*, *, *): *}
  */
 module.exports = function filterPipes() {
     return (docs, words, index) =>

@@ -3,18 +3,15 @@ const is = require('hast-util-is-element');
 const source = require('unist-util-source');
 
 /**
- * Add the width and height of the image to the `img` tag if they are
- * not already provided. This helps prevent jank when the page is
- * rendered before the image has downloaded.
+ * img标签中没有定义width和height属性时，根据图片的大小给img标签添加width和height属性。
  *
- * If there is no `src` attribute on an image, or it is not possible
- * to load the image file indicated by the `src` then a warning is emitted.
+ * @param getImageDimensions 获取图片大小的服务
+ * @returns {function(): function(*, *): void}
  */
 module.exports = function addImageDimensions(getImageDimensions) {
     return function addImageDimensionsImpl() {
         return (ast, file) => {
             visit(ast, node => {
-
                 if (!is(node, 'img')) {
                     return;
                 }
@@ -22,7 +19,7 @@ module.exports = function addImageDimensions(getImageDimensions) {
                 const props = node.properties;
                 const src = props.src;
                 if (!src) {
-                    file.message('Missing src in image tag `' + source(node, file) + '`');
+                    file.message('img标签中没有src属性：`' + source(node, file) + '`');
                     return;
                 }
 
@@ -34,7 +31,7 @@ module.exports = function addImageDimensions(getImageDimensions) {
                     }
                 } catch (e) {
                     if (e.code === 'ENOENT') {
-                        file.fail('Unable to load src in image tag `' + source(node, file) + '`');
+                        file.fail('无法加载img标签的src属性指定的图片：`' + source(node, file) + '`');
                     } else {
                         file.fail(e.message);
                     }

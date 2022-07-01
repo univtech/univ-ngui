@@ -1,6 +1,7 @@
 /**
- * This service is used by the autoLinkCode post-processor to ignore the `http(s)` part in URLs
- * (i.e. `http://...` or `https://...`).
+ * autoLinkCode后处理器使用这个服务来忽略URL中的http或https
+ *
+ * @returns {function(*, *, *): *[]|*}
  */
 module.exports = function ignoreHttpInUrls() {
     const ignoredSchemes = ['http', 'https'];

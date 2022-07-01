@@ -1,8 +1,8 @@
 /**
- * This service is used by the autoLinkCode post-processor to ignore generic words
- * that could be mistaken as classes, functions, etc.
+ * autoLinkCode后处理器使用这个服务来忽略那些可能会被误认为类或函数的通用单词
+ *
+ * @returns {function(*, *, *): *[]|*}
  */
-
 module.exports = function ignoreGenericWords() {
     const ignoredWords = new Set([
         'a',

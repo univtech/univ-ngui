@@ -1,22 +1,17 @@
 /**
- * This service is used by the autoLinkCode post-processor to filter out ambiguous directive
- * docs where the matching word is a directive selector.
- * E.g. `ngModel`, which is a selector for a number of directives, where we are only really
- * interested in the `NgModel` class.
+ * autoLinkCode后处理器使用这个服务来过滤匹配单词是指令选择器时的不明确指令文档
+ *
+ * @returns {(function(*, *, *): (*))|*}
  */
 module.exports = function filterAmbiguousDirectiveAliases() {
     return (docs, words, index) => {
         const word = words[index];
 
-        // we are only interested if there are multiple matching docs
+        // 只处理存在多个匹配文档的情况
         if (docs.length > 1) {
-            if (docs.every(doc =>
-                // We are only interested if they are all either directives or components
-                (doc.docType === 'directive' || doc.docType === 'component') &&
-                // and the matching word is in the selector for all of them
-                doc[doc.docType + 'Options'].selector.indexOf(word) != -1
-            )) {
-                // find the directive whose class name matches the word (case-insensitive)
+            // 只处理指令或组件的选择器中包含匹配单词的情况
+            if (docs.every(doc => (doc.docType === 'directive' || doc.docType === 'component') && (doc[doc.docType + 'Options'].selector.indexOf(word) != -1))) {
+                // 查找类名与单词匹配的指令，不区分大小写
                 return docs.filter(doc => doc.name.toLowerCase() === word.toLowerCase());
             }
         }

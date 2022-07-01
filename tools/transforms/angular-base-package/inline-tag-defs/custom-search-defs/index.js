@@ -1,7 +1,6 @@
 module.exports = {
     name: 'searchKeywords',
-    description:
-        'A shorthand for creating elements with search terms. Usage: `{@searchKeywords term1 term2 termN }`',
+    description: '使用检索词创建元素的缩写。用法：`{@searchKeywords term1 term2 termN }`',
     handler: function (doc, tagName, tagDescription) {
         doc.searchKeywords = tagDescription;
         return '';

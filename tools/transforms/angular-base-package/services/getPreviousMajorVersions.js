@@ -5,19 +5,17 @@ const semver = require('semver');
 const versionMatcher = /refs\/tags\/(\d+.+)$/mg;
 
 /**
- * Get a collection of all the previous "last major" versions sorted by semantic version.
+ * 获取之前所有最新的主版本，按语义版本降序排序
  *
- * @param packageInfo injected from dgeni-packages/git
- * @param versionInfo injected from dgeni-packages/git
- * @returns an array of SemVer objects
+ * @param packageInfo 包信息，来源于dgeni-packages/git
+ * @param versionInfo 版本信息，来源于dgeni-packages/git
+ * @returns {(function(): ([]|*))|*}
  */
 module.exports = function getPreviousMajorVersions(packageInfo, versionInfo) {
     return () => {
-        // always use the remote tags as the local clone might not contain all commits when cloned with
-        // `git clone --depth=...`
+        // 使用远程tag，因为使用git clone --depth=...进行克隆时，本地仓库可能未包含所有提交
         const repoUrl = packageInfo.repository.url;
         const tagResults = child.spawnSync('git', ['ls-remote', '--tags', repoUrl], {encoding: 'utf8'});
-
         if (tagResults.status !== 0) {
             return [];
         }
@@ -26,29 +24,29 @@ module.exports = function getPreviousMajorVersions(packageInfo, versionInfo) {
         tagResults.stdout.replace(versionMatcher, (_, tag) => {
             const version = semver.parse(tag);
 
-            // Not interested in tags that do not match semver format.
+            // 忽略不匹配语义版本格式的tag
             if (version === null) {
                 return;
             }
 
-            // Not interested in pre-release versions.
+            // 忽略预发版本
             if (version.prerelease !== null && version.prerelease.length > 0) {
                 return;
             }
 
-            // Only interested in versions that are earlier than the current major.
+            // 忽略主版本大于等于当前主版本的tag
             if (version.major >= versionInfo.currentVersion.major) {
                 return;
             }
 
-            const currentMajor = majorVersions[version.major];
-            if (currentMajor === undefined || semver.compare(version, currentMajor) === 1) {
-                // This version is newer than the currently captured version for this major.
+            // tag版本大于之前获取的版本时，更新主版本对应的版本
+            const currentVersion = majorVersions[version.major];
+            if (currentVersion === undefined || semver.compare(version, currentVersion) === 1) {
                 majorVersions[version.major] = version;
             }
         });
 
-        // Sort them in descending order
+        // 降序排序
         return semver.sort(Object.values(majorVersions)).reverse();
     };
 };
