@@ -2,8 +2,11 @@
   "name": "angular.io",
   "version": "0.0.0",
   "main": "index.js",
-  "repository": "git@github.com:angular/angular.git",
-  "author": "Angular",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/univtech/univ-ngui.git"
+  },
+  "author": "KisonHuang",
   "license": "MIT",
   "scripts": {
     "postinstall": "node tools/cli-patches/patch.js",
