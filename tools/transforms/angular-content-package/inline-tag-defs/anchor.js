@@ -1,6 +1,6 @@
 module.exports = {
     name: 'a',
-    description: 'A shorthand for creating heading anchors. Usage: `{@a some-id}`',
+    description: '创建标题链接的缩写。用法：`{@a some-id}`',
     handler: function (doc, tagName, tagDescription) {
         return '<a id="' + tagDescription.trim() + '"></a>';
     }
