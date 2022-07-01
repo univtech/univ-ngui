@@ -1,15 +1,15 @@
 var Package = require('dgeni').Package;
 var jsdocPackage = require('dgeni-packages/jsdoc');
+
 var linksPackage = require('../links-package');
 var {requireFolder} = require('../config');
 
-// Define the dgeni package for generating the docs
 module.exports = new Package('content', [jsdocPackage, linksPackage])
 
-    // Register the services and file readers
+    // 注册文件读取器
     .factory(require('./readers/content'))
 
-    // Configure file reading
+    // 配置文件读取器
     .config(function (readFilesProcessor, contentFileReader) {
         readFilesProcessor.fileReaders.push(contentFileReader);
     })
@@ -21,7 +21,6 @@ module.exports = new Package('content', [jsdocPackage, linksPackage])
 
     // Configure ids and paths
     .config(function (computeIdsProcessor) {
-
         computeIdsProcessor.idTemplates.push({
             docTypes: ['content'],
             getId: function (doc) {
