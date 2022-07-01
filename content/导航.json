@@ -1,0 +1,45 @@
+{
+  "TopBar": [
+    {
+      "title": "Web",
+      "children": [
+        {
+          "url": "html/简介",
+          "title": "HTML标题"
+        }
+      ]
+    },
+    {
+      "title": "Web",
+      "children": [
+        {
+          "url": "css/简介",
+          "title": "CSS标题"
+        }
+      ]
+    }
+  ],
+  "TopBarNarrow": [
+    {
+      "title": "Web",
+      "children": [
+        {
+          "url": "html/简介",
+          "title": "HTML标题"
+        }
+      ]
+    }
+  ],
+  "Footer": [
+    {
+      "title": "Web",
+      "children": [
+        {
+          "url": "html/简介",
+          "title": "HTML标题",
+          "tooltip": "HTML提示"
+        }
+      ]
+    }
+  ]
+}
