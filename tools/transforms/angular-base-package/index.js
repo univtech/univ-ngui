@@ -15,9 +15,7 @@ const targetPackage = require('../target-package');
 const {
     PROJECT_ROOT,
     TEMPLATES_PATH,
-    CONTENTS_PATH,
     SRC_PATH,
-    OUTPUT_PATH,
     DOCS_OUTPUT_PATH,
     requireFolder,
 } = require('../config');
@@ -116,11 +114,13 @@ module.exports = new Package('angular-base', [
         };
     })
 
+/*
     .config(function (copyContentAssetsProcessor) {
         copyContentAssetsProcessor.assetMappings.push(
-            {from: path.resolve(CONTENTS_PATH, 'images'), to: path.resolve(OUTPUT_PATH, 'images')}
+            {from: path.resolve(CONTENTS_PATH, '/!**!/images'), to: path.resolve(OUTPUT_PATH, '/!**!/images')}
         );
     })
+*/
 
     // We are not going to be relaxed about ambiguous links
     .config(function (getLinkInfo) {
