@@ -7,8 +7,8 @@
  * `MyClass.member` rather than simply `member`.
  */
 module.exports = function disambiguateByNonMember() {
-  return (alias, originatingDoc, docs) => {
-    const filteredDocs = docs.filter(doc => doc.docType !== 'member');
-    return filteredDocs.length > 0 ? filteredDocs : docs;
-  };
+    return (alias, originatingDoc, docs) => {
+        const filteredDocs = docs.filter(doc => doc.docType !== 'member');
+        return filteredDocs.length > 0 ? filteredDocs : docs;
+    };
 };
