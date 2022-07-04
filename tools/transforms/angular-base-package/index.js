@@ -10,7 +10,6 @@ const postProcessPackage = require('dgeni-packages/post-process-html');
 
 const linksPackage = require('../links-package');
 const remarkPackage = require('../remark-package');
-const targetPackage = require('../target-package');
 
 const {
     PROJECT_ROOT,
@@ -21,7 +20,7 @@ const {
 } = require('../config');
 
 module.exports = new Package('angular-base', [
-    gitPackage, jsdocPackage, nunjucksPackage, linksPackage, targetPackage, remarkPackage, postProcessPackage
+    gitPackage, jsdocPackage, nunjucksPackage, linksPackage, remarkPackage, postProcessPackage
 ])
 
     // Register the processors
@@ -73,16 +72,6 @@ module.exports = new Package('angular-base', [
     .config(function (writeFilesProcessor) {
         writeFilesProcessor.outputFolder = DOCS_OUTPUT_PATH;
     })
-
-    // Target environments
-    .config(function (targetEnvironments) {
-        const ALLOWED_LANGUAGES = ['ts', 'js', 'dart'];
-        const TARGET_LANGUAGE = 'ts';
-
-        ALLOWED_LANGUAGES.forEach(target => targetEnvironments.addAllowed(target));
-        targetEnvironments.activate(TARGET_LANGUAGE);
-    })
-
 
     // Configure nunjucks rendering of docs via templates
     .config(function (
