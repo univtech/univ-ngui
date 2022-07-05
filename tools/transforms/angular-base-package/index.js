@@ -8,7 +8,6 @@ const jsdocPackage = require('dgeni-packages/jsdoc');
 const nunjucksPackage = require('dgeni-packages/nunjucks');
 const postProcessPackage = require('dgeni-packages/post-process-html');
 
-const linksPackage = require('../links-package');
 const remarkPackage = require('../remark-package');
 
 const {
@@ -20,7 +19,7 @@ const {
 } = require('../config');
 
 module.exports = new Package('angular-base', [
-    gitPackage, jsdocPackage, nunjucksPackage, linksPackage, remarkPackage, postProcessPackage
+    gitPackage, jsdocPackage, nunjucksPackage, remarkPackage, postProcessPackage
 ])
 
     // Register the processors
@@ -43,13 +42,8 @@ module.exports = new Package('angular-base', [
     .factory(require('./services/copyFolder'))
     .factory(require('./services/getImageDimensions'))
     .factory(require('./services/getPreviousMajorVersions'))
-    .factory(require('./services/auto-link-filters/filterPipes'))
-    .factory(require('./services/auto-link-filters/filterAmbiguousDirectiveAliases'))
-    .factory(require('./services/auto-link-filters/ignoreHttpInUrls'))
-    .factory(require('./services/auto-link-filters/ignoreGenericWords'))
 
     .factory(require('./post-processors/add-image-dimensions'))
-    .factory(require('./post-processors/auto-link-code'))
 
     // Configure jsdoc-style tag parsing
     .config(function (inlineTagProcessor) {
@@ -111,11 +105,6 @@ module.exports = new Package('angular-base', [
     })
 */
 
-    // We are not going to be relaxed about ambiguous links
-    .config(function (getLinkInfo) {
-        getLinkInfo.useFirstAmbiguousLink = false;
-    })
-
     .config(function (checkAnchorLinksProcessor) {
         // since we encode the HTML to JSON we need to ensure that this processor runs before that encoding happens.
         checkAnchorLinksProcessor.$runBefore = ['convertToJsonProcessor'];
@@ -151,15 +140,12 @@ module.exports = new Package('angular-base', [
     })
 
 
-    .config(function (postProcessHtml, addImageDimensions, autoLinkCode, filterPipes, filterAmbiguousDirectiveAliases, ignoreHttpInUrls, ignoreGenericWords) {
+    .config(function (postProcessHtml, addImageDimensions) {
         addImageDimensions.basePath = path.resolve(PROJECT_ROOT, 'src');
-        autoLinkCode.customFilters = [ignoreGenericWords, ignoreHttpInUrls, filterPipes, filterAmbiguousDirectiveAliases];
-        autoLinkCode.failOnMissingDocPath = true;
         postProcessHtml.plugins = [
             require('./post-processors/autolink-headings'),
             addImageDimensions,
             require('./post-processors/h1-checker'),
-            autoLinkCode,
         ];
     })
 

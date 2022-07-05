@@ -1,10 +1,9 @@
 var Package = require('dgeni').Package;
 var jsdocPackage = require('dgeni-packages/jsdoc');
 
-var linksPackage = require('../links-package');
 var {requireFolder} = require('../config');
 
-module.exports = new Package('content', [jsdocPackage, linksPackage])
+module.exports = new Package('content', [jsdocPackage])
 
     // 注册文件读取器
     .factory(require('./readers/content'))
