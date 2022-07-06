@@ -33,7 +33,11 @@ module.exports = new Package('angular-content', [basePackage, contentPackage])
                 getPath: (doc) => `${doc.id.replace(/\/index$/, '')}`,
                 outputPathTemplate: '${path}.json'
             },
-            {docTypes: ['导航-json'], pathTemplate: '${id}', outputPathTemplate: '../${id}.json'}
+            {
+                docTypes: ['json'],
+                pathTemplate: '${id}',
+                outputPathTemplate: '${path}'
+            }
         ]);
     })
 

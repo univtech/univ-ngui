@@ -117,19 +117,8 @@ module.exports = new Package('angular-base', [
         checkAnchorLinksProcessor.errorOnUnmatchedLinks = true;
     })
 
-    .config(function (computePathsProcessor, generateKeywordsProcessor) {
-
+    .config(function (generateKeywordsProcessor) {
         generateKeywordsProcessor.outputFolder = 'app';
-
-        // Replace any path templates inherited from other packages
-        // (we want full and transparent control)
-        computePathsProcessor.pathTemplates = [
-            {
-                docTypes: ['example-region'], getOutputPath: function () {
-
-                }
-            },
-        ];
     })
 
 

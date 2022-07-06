@@ -13,7 +13,10 @@ module.exports = function contentFileReader() {
         name: 'contentFileReader',
         defaultPattern: /\.md$/,
         getDocs: function (fileInfo) {
-            return [{docType: 'content', content: fileInfo.content}];
+            return [{
+                docType: 'content',
+                content: fileInfo.content
+            }];
         }
     };
 };
