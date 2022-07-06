@@ -1,9 +1,8 @@
-# CSS styles in angular.io
+# angular.io中的CSS样式
 
 This document gives an overview of how angular.io CSS styles are implemented and organized in files.
 
-
-## General
+## 通用
 
 Styles are implemented using [Sass](https://sass-lang.com/) and stored in `.scss` files in [src/styles/](.).
 
@@ -12,13 +11,13 @@ Styles are implemented using [Sass](https://sass-lang.com/) and stored in `.scss
 > Styles for components are defined in `.scss` files in [src/styles/](.) and are not referenced from the component files.
 
 
-## File organization
+## 文件组织
 
-The `.scss` files are organized in the following sub-directories:
-- [0-base/](./0-base): General styles affecting the whole application.
-- [1-layouts/](./1-layouts): Styles for areas/components related to the layout of the application, such as `top-menu`, `footer`, marketing pages, etc.
-- [2-modules/](./2-modules): Styles for specialized components (such as buttons, code, labels, etc.) and specific pages (such as API list page, "Features" page, etc.).
-- [custom-themes/](./custom-themes): Entry-points for the different themes available in the application (currently `light` and `dark`).
+.scss文件在以下子目录中：
++ 0-base：影响整个应用程序的通用样式。
++ 1-layouts：与应用程序布局相关的区域或组件样式，例如：顶部菜单、页脚、营销页面等等。
++ 2-modules：特定组件的样式，例如：按钮、代码、标签等等；特定页面的样式，例如：API列表页面，特性页面等等。
++ custom-themes：应用程序中不同主题的样式，当前支持浅色和深色。
 
 There are also some top-level files in `[src/styles/](.):
 - [_app-theme.scss](./_app-theme.scss): Defines a `theme()` Sass mixin for creating an application theme.
@@ -28,7 +27,7 @@ There are also some top-level files in `[src/styles/](.):
 - [main.scss](./main.scss): Styles entry-point.
 
 
-### Styles for a specific area/component
+### 特定区域或组件的样式
 
 For each area/component, there is a sub-directory in either `1-layouts/` or `2-modules/`.
 
@@ -38,13 +37,13 @@ See the next section for more details.
 When appropriate, the styles in these files should be scoped to the targeted component (for example, by using the component's selector).
 
 
-## Theming
+## 主题
 
 Angular.io supports choosing between themes. Currently, a `light` and a `dark` theme are supported.
 See also [#41129](https://github.com/angular/angular/pull/41129) for more details/discussions around the theming implementation.
 
 
-## Styles for theming
+## 主题样式
 
 Styles for each area/component are split between two files: `<name>.scss` and `<name>-theme.scss`.
 
@@ -64,7 +63,7 @@ Disadvantages of the chosen approach:
 - Splitting styles into two files means that some selectors will be duplicated, resulting in an increase of the total styles chunk size.
 
 
-## Applying a theme at runtime
+## 在运行时应用主题
 
 When building the app the following styles bundles are generated:
 - One [based on `main.scss`](https://github.com/angular/angular/blob/62b5a6cb079e489d91982abe88d644d73feb73f3/aio/angular.json#L44), which is always included in `index.html` and contains the general (non-theme-specific) styles.

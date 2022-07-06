@@ -147,22 +147,21 @@ export class LocationService {
             return true; // let the download happen
         }
 
+        // 修复指向页内片段的页内链接，因为基URL被设置为/，所以相对于根路径/进行解析
+        // 参考：https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base#in-page_anchors
         const {pathname, search, hash} = anchor;
-        // Fix in-page anchors that are supposed to point to fragments inside the page, but are resolved
-        // relative the the root path (`/`), due to the base URL being set to `/`.
-        // (See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base#in-page_anchors.)
         const isInPageAnchor = anchor.getAttribute('href')?.startsWith('#') ?? false;
         const correctPathname = isInPageAnchor ? this.location.path() : pathname;
         const relativeUrl = correctPathname + search + hash;
         this.urlParser.href = relativeUrl;
 
-        // don't navigate if external link or has extension
+        // 链接是外部链接或者链接存在扩展名时不导航
         if ((!isInPageAnchor && anchor.href !== this.urlParser.href) ||
             !/\/[^/.]*$/.test(pathname)) {
             return true;
         }
 
-        // approved for navigation
+        // 允许导航
         this.go(relativeUrl);
         return false;
     }

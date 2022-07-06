@@ -4,32 +4,40 @@ import {fromEvent, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {SessionStorage} from './storage.service';
 
+// 滚动位置
 type ScrollPosition = [number, number];
 
+// 滚动位置的弹出状态事件
 interface ScrollPositionPopStateEvent extends PopStateEvent {
-    // If there is history state, it should always include `scrollPosition`.
+    // 如果存在历史状态，应该包含scrollPosition
     state?: { scrollPosition: ScrollPosition };
 }
 
+// 顶部外边距
 export const topMargin = 16;
 
 /**
- * A service that scrolls document elements into view
+ * 滚动服务：把文档元素滚动到视图中。
  */
 @Injectable()
 export class ScrollService implements OnDestroy {
+
+    // 顶部偏移量
     private _topOffset: number | null;
+
+    // 顶部页面元素
     private _topOfPageElement: HTMLElement;
+
+    // 销毁主题
     private onDestroy = new Subject<void>();
 
-    // The scroll position which has to be restored, after a `popstate` event.
+    // 弹出状态事件之后需要修复的滚动位置
     poppedStateScrollPosition: ScrollPosition | null = null;
-    // Whether the browser supports the necessary features for manual scroll restoration.
-    supportManualScrollRestoration: boolean = !!window && ('scrollTo' in window) &&
-        ('pageXOffset' in window) && isScrollRestorationWritable();
 
-    // Offset from the top of the document to bottom of any static elements
-    // at the top (e.g. toolbar) + some margin
+    // 浏览器是否支持手动滚动修复
+    supportManualScrollRestoration: boolean = !!window && ('scrollTo' in window) && ('pageXOffset' in window) && isScrollRestorationWritable();
+
+    // 获取顶部偏移量：文档顶部到顶部静态元素底部（例如：工具栏）的偏移量 + 顶部外边距
     get topOffset() {
         if (!this._topOffset) {
             const toolbar = this.document.querySelector('.app-toolbar');
@@ -38,6 +46,7 @@ export class ScrollService implements OnDestroy {
         return this._topOffset as number;
     }
 
+    // 获取顶部页面元素
     get topOfPageElement() {
         if (!this._topOfPageElement) {
             this._topOfPageElement = this.document.getElementById('top-of-page') || this.document.body;
@@ -45,31 +54,34 @@ export class ScrollService implements OnDestroy {
         return this._topOfPageElement;
     }
 
-    constructor(
-        @Inject(DOCUMENT) private document: Document, private platformLocation: PlatformLocation,
-        private viewportScroller: ViewportScroller, private location: Location,
-        @Inject(SessionStorage) private storage: Storage) {
-        // On resize, the toolbar might change height, so "invalidate" the top offset.
-        fromEvent(window, 'resize')
-            .pipe(takeUntil(this.onDestroy))
-            .subscribe(() => this._topOffset = null);
+    /**
+     * 构造函数，创建ScrollService。
+     *
+     * @param document Document对象
+     * @param platformLocation PlatformLocation对象
+     * @param viewportScroller 滚动位置管理器
+     * @param location Location对象
+     * @param storage 存储对象
+     */
+    constructor(@Inject(DOCUMENT) private document: Document,
+                private platformLocation: PlatformLocation,
+                private viewportScroller: ViewportScroller,
+                private location: Location,
+                @Inject(SessionStorage) private storage: Storage) {
 
-        fromEvent(window, 'scroll')
-            .pipe(debounceTime(250), takeUntil(this.onDestroy))
-            .subscribe(() => this.updateScrollPositionInHistory());
+        // 调整大小时，可能会改变工具栏高度，这样会使顶部偏移量失效
+        fromEvent(window, 'resize').pipe(takeUntil(this.onDestroy)).subscribe(() => this._topOffset = null);
+        fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.onDestroy)).subscribe(() => this.updateScrollPositionInHistory());
+        fromEvent(window, 'beforeunload').pipe(takeUntil(this.onDestroy)).subscribe(() => this.updateScrollLocationHref());
 
-        fromEvent(window, 'beforeunload')
-            .pipe(takeUntil(this.onDestroy))
-            .subscribe(() => this.updateScrollLocationHref());
-
-        // Change scroll restoration strategy to `manual` if it's supported.
+        // 把滚动修复策略修改为manual
         if (this.supportManualScrollRestoration) {
             history.scrollRestoration = 'manual';
 
-            // We have to detect forward and back navigation thanks to popState event.
+            // 因为存在弹出状态事件，所以需要检测前进和后退导航
             const locationSubscription = this.location.subscribe((event: ScrollPositionPopStateEvent) => {
-                // The type is `hashchange` when the fragment identifier of the URL has changed. It allows
-                // us to go to position just before a click on an anchor.
+                // The type is `hashchange` when the fragment identifier of the URL has changed.
+                // It allows us to go to position just before a click on an anchor.
                 if (event.type === 'hashchange') {
                     this.scrollToPosition();
                 } else {
