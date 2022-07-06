@@ -11,7 +11,7 @@ module.exports = function checkUnbalancedBackTicks(log, createDocMessage) {
     const UNBALANCED_BACKTICK_WARNING = 'checkUnbalancedBackTicks processor: unbalanced backticks found in rendered content';
 
     return {
-        $runAfter: ['inlineTagProcessor'],
+        $runAfter: ['generateKeywordsProcessor'],
         $runBefore: ['writeFilesProcessor'],
         $process: function (docs) {
             docs

@@ -1,63 +1,58 @@
 'use strict';
 
 /**
- * @dgProcessor generateKeywordsProcessor
- * @description
- * This processor extracts all the keywords from each document and creates
- * a new document that will be rendered as a JavaScript file containing all
- * this data.
+ * 处理器：generateKeywordsProcessor
+ *
+ * 该处理器从每个文档提取所有关键字，并创建一个新文档，该文档将作为包含所有这些数据的JavaScript文件呈现。
+ *
+ *
+ * 从每个文档提取关键字，
+ *
+ * and creates a new document that will be rendered as a JavaScript file containing all this data.
  */
 module.exports = function generateKeywordsProcessor(log) {
     return {
-        ignoreWords: [],
-        propertiesToIgnore: [],
-        docTypesToIgnore: [],
-        outputFolder: '',
+        ignoreWords: [],      // 忽略单词
+        ignoreProperties: [], // 忽略属性
+        ignoreDocTypes: [],   // 忽略文档类型
+        outputFolder: '',     // 输出目录
         $validate: {
             ignoreWords: {},
-            docTypesToIgnore: {},
-            propertiesToIgnore: {},
+            ignoreProperties: {},
+            ignoreDocTypes: {},
             outputFolder: {presence: true}
         },
         $runAfter: ['postProcessHtml'],
         $runBefore: ['writing-files'],
         async $process(docs) {
             const {stemmer: stem} = await import('stemmer');
-
-
             const dictionary = new Map();
-
             const emptySet = new Set();
 
-            // Keywords to ignore
             const ignoreWords = new Set(this.ignoreWords);
-            log.debug('Words to ignore', ignoreWords);
-            const propertiesToIgnore = new Set(this.propertiesToIgnore);
-            log.debug('Properties to ignore', propertiesToIgnore);
-            const docTypesToIgnore = new Set(this.docTypesToIgnore);
-            log.debug('Doc types to ignore', docTypesToIgnore);
+            log.debug('忽略单词：', ignoreWords);
+            const ignoreProperties = new Set(this.ignoreProperties);
+            log.debug('忽略属性：', ignoreProperties);
+            const ignoreDocTypes = new Set(this.ignoreDocTypes);
+            log.debug('忽略文档类型：', ignoreDocTypes);
 
-
-            const filteredDocs = docs
-                // We are not interested in some docTypes
-                .filter(doc => !docTypesToIgnore.has(doc.docType))
-                // Ignore internals and private exports (indicated by the ɵ prefix)
-                .filter(doc => !doc.internal && !doc.privateExport);
-
+            // 过滤掉忽略文档类型，过滤掉内部或私有文档
+            const filteredDocs = docs.filter(doc => !ignoreDocTypes.has(doc.docType)).filter(doc => !doc.internal && !doc.privateExport);
 
             for (const doc of filteredDocs) {
-                // Search each top level property of the document for search terms
+                // 从属性值中提取关键字
                 let mainTokens = [];
                 for (const key of Object.keys(doc)) {
                     const value = doc[key];
-                    if (isString(value) && !propertiesToIgnore.has(key)) {
+                    if (isString(value) && !ignoreProperties.has(key)) {
                         mainTokens.push(...tokenize(value, ignoreWords, dictionary));
                     }
                 }
 
+                // 从成员中提取关键词
                 const memberTokens = extractMemberTokens(doc, dictionary);
 
-                // Extract all the keywords from the headings
+                // 从标题中提取关键词
                 let headingTokens = [];
                 if (doc.vFile && doc.vFile.headings) {
                     for (const headingTag of Object.keys(doc.vFile.headings)) {
@@ -67,20 +62,19 @@ module.exports = function generateKeywordsProcessor(log) {
                     }
                 }
 
-
-                // Extract the title to use in searches
+                // 提取检索中使用的标题
                 doc.searchTitle = doc.searchTitle || doc.title || doc.vFile && doc.vFile.title || doc.name || '';
 
-                // Attach all this search data to the document
+                // 把检索数据添加到文档中
                 doc.searchTerms = {};
-                if (headingTokens.length > 0) {
-                    doc.searchTerms.headings = headingTokens;
-                }
                 if (mainTokens.length > 0) {
                     doc.searchTerms.keywords = mainTokens;
                 }
                 if (memberTokens.length > 0) {
                     doc.searchTerms.members = memberTokens;
+                }
+                if (headingTokens.length > 0) {
+                    doc.searchTerms.headings = headingTokens;
                 }
                 if (doc.searchKeywords) {
                     doc.searchTerms.topics = doc.searchKeywords.trim();

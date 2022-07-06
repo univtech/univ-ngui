@@ -11,7 +11,7 @@ module.exports = function fixInternalDocumentLinks() {
     var INTERNAL_LINK = /(<a [^>]*href=")(#[^"]*)/g;
 
     return {
-        $runAfter: ['inlineTagProcessor'],
+        $runAfter: ['checkUnbalancedBackTicks'],
         $runBefore: ['convertToJsonProcessor'],
         $process: function (docs) {
             docs.forEach(doc => {

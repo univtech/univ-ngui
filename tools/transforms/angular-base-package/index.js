@@ -4,7 +4,6 @@ const path = require('path');
 
 const Package = require('dgeni').Package;
 const gitPackage = require('dgeni-packages/git');
-const jsdocPackage = require('dgeni-packages/jsdoc');
 const nunjucksPackage = require('dgeni-packages/nunjucks');
 const postProcessPackage = require('dgeni-packages/post-process-html');
 
@@ -19,7 +18,7 @@ const {
 } = require('../config');
 
 module.exports = new Package('angular-base', [
-    gitPackage, jsdocPackage, nunjucksPackage, remarkPackage, postProcessPackage
+    gitPackage, nunjucksPackage, remarkPackage, postProcessPackage
 ])
 
     // Register the processors
@@ -45,21 +44,16 @@ module.exports = new Package('angular-base', [
 
     .factory(require('./post-processors/add-image-dimensions'))
 
-    // Configure jsdoc-style tag parsing
-    .config(function (inlineTagProcessor) {
-        inlineTagProcessor.inlineTagDefinitions.push(require('./inline-tag-defs/custom-search-defs/'));
-    })
-
     // Where do we get the source files?
     .config(function (readFilesProcessor, generateKeywordsProcessor, jsonFileReader) {
-
+        readFilesProcessor.fileReaders = readFilesProcessor.fileReaders || [];
         readFilesProcessor.fileReaders.push(jsonFileReader);
         readFilesProcessor.basePath = PROJECT_ROOT;
         readFilesProcessor.sourceFiles = [];
 
         generateKeywordsProcessor.ignoreWords = require(path.resolve(__dirname, 'ignore-words'))['en'];
-        generateKeywordsProcessor.docTypesToIgnore = [undefined, 'example-region', 'json-doc', 'api-list-data', 'api-list-data', 'contributors-json', 'navigation-json', 'announcements-json'];
-        generateKeywordsProcessor.propertiesToIgnore = ['basePath', 'renderedContent', 'docType', 'searchTitle'];
+        generateKeywordsProcessor.ignoreDocTypes = [undefined, 'example-region', 'json-doc', 'api-list-data', 'api-list-data', 'contributors-json', 'navigation-json', 'announcements-json'];
+        generateKeywordsProcessor.ignoreProperties = ['basePath', 'renderedContent', 'docType', 'searchTitle'];
     })
 
     // Where do we write the output files?

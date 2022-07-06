@@ -23,13 +23,6 @@ module.exports = new Package('angular-content', [basePackage, contentPackage])
         ]);
     })
 
-
-    // Configure jsdoc-style tag parsing
-    .config(function (inlineTagProcessor) {
-        inlineTagProcessor.inlineTagDefinitions.push(require('./inline-tag-defs/anchor'));
-    })
-
-
     .config(function (computePathsProcessor) {
 
         // Replace any path templates inherited from other packages
@@ -40,7 +33,7 @@ module.exports = new Package('angular-content', [basePackage, contentPackage])
                 getPath: (doc) => `${doc.id.replace(/\/index$/, '')}`,
                 outputPathTemplate: '${path}.json'
             },
-            {docTypes: ['navigation-json'], pathTemplate: '${id}', outputPathTemplate: '../${id}.json'}
+            {docTypes: ['导航-json'], pathTemplate: '${id}', outputPathTemplate: '../${id}.json'}
         ]);
     })
 

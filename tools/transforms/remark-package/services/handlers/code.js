@@ -1,5 +1,5 @@
 /**
- * Render markdown code blocks as `<code-example>` tags
+ * 把Markdown代码块渲染为code-example标签
  */
 module.exports = function code(h, node) {
     var value = node.value ? ('\n' + node.value + '\n') : '';

@@ -30,7 +30,7 @@ module.exports = function checkContentRules(log, createDocMessage) {
          */
         docTypeRules: {},
         failOnContentErrors: false,
-        $runAfter: ['tags-extracted'],
+        $runAfter: ['writeFilesProcessor'],
         $runBefore: [],
         $process(docs) {
             const logMessage = this.failOnContentErrors ? log.error.bind(log) : log.warn.bind(log);

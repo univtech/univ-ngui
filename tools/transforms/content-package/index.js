@@ -1,25 +1,17 @@
 var Package = require('dgeni').Package;
-var jsdocPackage = require('dgeni-packages/jsdoc');
 
-var {requireFolder} = require('../config');
-
-module.exports = new Package('content', [jsdocPackage])
+module.exports = new Package('content')
 
     // 注册文件读取器
     .factory(require('./readers/content'))
 
-    // 配置文件读取器
     .config(function (readFilesProcessor, contentFileReader) {
+        // 配置readFilesProcessor
         readFilesProcessor.fileReaders.push(contentFileReader);
     })
 
-    .config(function (parseTagsProcessor, getInjectables) {
-        parseTagsProcessor.tagDefinitions = parseTagsProcessor.tagDefinitions.concat(
-            getInjectables(requireFolder(__dirname, './tag-defs')));
-    })
-
-    // Configure ids and paths
     .config(function (computeIdsProcessor) {
+        // 配置computeIdsProcessor
         computeIdsProcessor.idTemplates.push({
             docTypes: ['content'],
             getId: function (doc) {

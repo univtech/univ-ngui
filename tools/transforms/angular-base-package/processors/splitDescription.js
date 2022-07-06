@@ -5,11 +5,12 @@
  */
 module.exports = function splitDescription() {
     return {
-        $runAfter: ['tags-extracted'],
+        $runAfter: ['readFilesProcessor'],
         $runBefore: ['processing-docs'],
         docTypes: [],
         $process(docs) {
             docs.forEach(doc => {
+                doc.description = (doc.content || '').split(/\r?\n/).join('\n');
                 if (this.docTypes.indexOf(doc.docType) !== -1 && doc.description !== undefined) {
                     const description = doc.description.trim();
                     const endOfParagraph = description.search(/\n\s*\n/);

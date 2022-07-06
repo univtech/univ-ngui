@@ -28,17 +28,15 @@ module.exports = function renderMarkdown() {
     };
 
     /**
-     * Teach remark not to render indented codeblocks
+     * 不渲染缩进代码块
      */
     function noIndentedCodeBlocks() {
         const blockMethods = this.Parser.prototype.blockMethods;
         blockMethods.splice(blockMethods.indexOf('indentedCode'), 1);
     }
 
-
     /**
-     * Teach remark about inline tags, so that it neither wraps block level
-     * tags in paragraphs nor processes the text within the tag.
+     * Teach remark about inline tags, so that it neither wraps block level tags in paragraphs nor processes the text within the tag.
      */
     function inlineTagDefs() {
         const Parser = this.Parser;
