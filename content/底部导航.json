@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Web",
+    "children": [
+      {
+        "url": "html/简介",
+        "title": "HTML标题",
+        "tooltip": "HTML提示"
+      }
+    ]
+  }
+]
