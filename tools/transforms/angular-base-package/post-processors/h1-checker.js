@@ -22,7 +22,7 @@ module.exports = function h1CheckerPostProcessor() {
 
         file.title = file.headings.h1[0];
         if (file.headings.h1.length > 1) {
-            file.fail(`More than one h1 found in ${file}`);
+            file.fail(`在${file}中找到多个h1`);
         }
     };
 };

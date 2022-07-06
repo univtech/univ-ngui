@@ -33,7 +33,7 @@ module.exports = [
     slug,
     [link, {
         properties: {
-            title: 'Link to this heading',
+            title: '链接到这个标题',
             className: ['header-link'],
             'aria-hidden': 'true'
         },

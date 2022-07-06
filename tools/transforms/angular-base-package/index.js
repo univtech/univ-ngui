@@ -52,7 +52,7 @@ module.exports = new Package('angular-base', [
         readFilesProcessor.sourceFiles = [];
 
         generateKeywordsProcessor.ignoreWords = require(path.resolve(__dirname, 'ignore-words'))['en'];
-        generateKeywordsProcessor.ignoreDocTypes = [undefined, 'example-region', 'json-doc', 'api-list-data', 'api-list-data', 'contributors-json', 'navigation-json', 'announcements-json'];
+        generateKeywordsProcessor.ignoreDocTypes = [undefined, 'json-doc', 'navigation-json'];
         generateKeywordsProcessor.ignoreProperties = ['basePath', 'renderedContent', 'docType', 'searchTitle'];
     })
 
@@ -81,9 +81,7 @@ module.exports = new Package('angular-base', [
 
         // Nunjucks and Angular conflict in their template bindings so change Nunjucks
         templateEngine.config.tags = {variableStart: '{$', variableEnd: '$}'};
-
-        templateEngine.filters =
-            templateEngine.filters.concat(getInjectables(requireFolder(__dirname, './rendering')));
+        templateEngine.filters = templateEngine.filters.concat(getInjectables(requireFolder(__dirname, './rendering')));
 
         // helpers are made available to the nunjucks templates
         renderDocsProcessor.helpers.relativePath = function (from, to) {
@@ -91,13 +89,13 @@ module.exports = new Package('angular-base', [
         };
     })
 
-/*
-    .config(function (copyContentAssetsProcessor) {
-        copyContentAssetsProcessor.assetMappings.push(
-            {from: path.resolve(CONTENTS_PATH, '/!**!/images'), to: path.resolve(OUTPUT_PATH, '/!**!/images')}
-        );
-    })
-*/
+    /*
+        .config(function (copyContentAssetsProcessor) {
+            copyContentAssetsProcessor.assetMappings.push(
+                {from: path.resolve(CONTENTS_PATH, '/!**!/images'), to: path.resolve(OUTPUT_PATH, '/!**!/images')}
+            );
+        })
+    */
 
     .config(function (checkAnchorLinksProcessor) {
         // since we encode the HTML to JSON we need to ensure that this processor runs before that encoding happens.
@@ -128,6 +126,7 @@ module.exports = new Package('angular-base', [
         computePathsProcessor.pathTemplates = [
             {
                 docTypes: ['example-region'], getOutputPath: function () {
+
                 }
             },
         ];
