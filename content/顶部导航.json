@@ -1,18 +1,26 @@
 [
   {
-    "title": "Web",
+    "title": "Web技术",
     "children": [
       {
-        "url": "html/简介",
+        "url": "html/HTML简介",
         "title": "HTML标题"
+      },
+      {
+        "url": "css/CSS简介",
+        "title": "CSS标题"
       }
     ]
   },
   {
-    "title": "Web",
+    "title": "Web技术",
     "children": [
       {
-        "url": "css/简介",
+        "url": "html/HTML简介",
+        "title": "HTML标题"
+      },
+      {
+        "url": "css/CSS简介",
         "title": "CSS标题"
       }
     ]
